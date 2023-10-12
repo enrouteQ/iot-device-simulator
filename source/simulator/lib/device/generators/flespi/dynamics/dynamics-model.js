@@ -104,7 +104,7 @@ class DynamicsModel {
 		let playbackName = snapshot.routeInfo?.routeName|| playback_name ;
 		let params = {
 			Bucket: process.env.PLAYBACK_BUCKET,
-			Key: routeName,
+			Key: playbackName,
 		};
 
 		try {
