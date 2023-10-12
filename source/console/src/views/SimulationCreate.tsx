@@ -151,7 +151,7 @@ export default function SimulationCreate(props: IPageProps): JSX.Element {
         }
     };
 
-    await getListOfPlaybacks();
+    getListOfPlaybacks();
 
 
     return (
