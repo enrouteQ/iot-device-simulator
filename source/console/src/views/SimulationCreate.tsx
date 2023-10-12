@@ -105,7 +105,7 @@ export default function SimulationCreate(props: IPageProps): JSX.Element {
                 break;
             case "type":
                 const type = event.target.value;
-                if (type === simTypes.autoDemo) {
+                if (type === simTypes.autoDemo || type === simTypes.flespiTest) {
                     simulation.simId = simTypes.autoDemo;
                 } else {
                     simulation.simId = "";
@@ -178,6 +178,7 @@ export default function SimulationCreate(props: IPageProps): JSX.Element {
                             >
                                 <option value={simTypes.custom}>{I18n.get("user.created")}</option>
                                 <option value={simTypes.autoDemo}>{I18n.get("vehicle.demo")}</option>
+                                <option value={simTypes.flespiTest}>{I18n.get("flespi.test")}</option>
                             </Form.Control>
                             <Form.Text>
                                 {I18n.get("simulation.type.description")}
