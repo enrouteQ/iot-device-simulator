@@ -24,6 +24,7 @@ export class StorageContruct extends Construct {
   public simulationsTable: Table;
   public deviceTypesTable: Table;
   public routesBucket: Bucket
+  public playbacksBucket: Bucket
 
   constructor(scope: Construct, id: string, props: StorageContructProps) {
     super(scope, id);
@@ -50,5 +51,15 @@ export class StorageContruct extends Construct {
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
       enforceSSL: true
     });
+
+    this.playbacksBucket = new Bucket(this, 'PlaybacksBucket', {
+        removalPolicy: RemovalPolicy.RETAIN,
+        serverAccessLogsBucket: props.s3LogsBucket,
+        serverAccessLogsPrefix: 'playback-bucket-access/',
+        encryption: BucketEncryption.S3_MANAGED,
+        blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+        enforceSSL: true
+    });
+
   }
 }

@@ -42,6 +42,7 @@ interface CustomResourceSetupUiProps {
   placeIndexName: string;
   //S3 bucket for vehcile routes
   routesBucket: IBucket;
+  playbacksBucket: IBucket;
   //IoT policy name
   iotPolicyName: string;
 }
@@ -146,6 +147,7 @@ export class CustomResourcesConstruct extends Construct {
     this.sourceCodeBucket.grantRead(this.helperLambda, `${this.sourceCodePrefix}/*`);
     props.consoleBucket.grantPut(this.helperLambda);
     props.routesBucket.grantPut(this.helperLambda);
+
 
     new CustomResource(this, 'CopyRouteFiles', {
       serviceToken: this.helperLambda.functionArn,

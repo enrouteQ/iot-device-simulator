@@ -31,6 +31,7 @@ export interface SimulatorConstructProps {
     readonly deviceTypeTable: Table;
     //Routes s3 bucket
     readonly routesBucket: Bucket;
+    readonly playbacksBucket: Bucket;
     //Unique Suffix
     readonly uniqueSuffix: string;
     /**
@@ -114,7 +115,8 @@ export class SimulatorConstruct extends Construct {
                 SOLUTION_ID: props.solutionConfig.solutionId,
                 VERSION: props.solutionConfig.solutionVersion,
                 UUID: props.uuid,
-                ROUTE_BUCKET: props.routesBucket.bucketName
+                ROUTE_BUCKET: props.routesBucket.bucketName,
+                PLAYBACK_BUCKET: props.playbacksBucket.bucketName
             },
             handler: 'index.handler',
             runtime: Runtime.NODEJS_18_X,
@@ -123,6 +125,7 @@ export class SimulatorConstruct extends Construct {
         });
         this.simulatorLambdaFunction.addEnvironment('SIM_TABLE', props.simulationTable.tableName)
         props.routesBucket.grantRead(this.simulatorLambdaFunction.grantPrincipal);
+        props.playbacksBucket.grantRead(this.simulatorLambdaFunction.grantPrincipal);
         const simulatorLambdaLogGroup = new LogGroup(this.simulatorLambdaFunction, 'EngineLambda', {
             removalPolicy: RemovalPolicy.DESTROY,
             logGroupName: `/aws/lambda/${Aws.STACK_NAME}-${this.simulatorLambdaFunction.functionName}-${props.uniqueSuffix}`,

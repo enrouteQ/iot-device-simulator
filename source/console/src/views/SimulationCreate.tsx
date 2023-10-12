@@ -1,12 +1,12 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-import { I18n, Logger } from "@aws-amplify/core";
-import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router';
-import { API } from '@aws-amplify/api';
-import { API_NAME, validateField } from '../util/Utils';
-import { IErrors, IPageProps, ISimulation, IDevice, simTypes } from '../components/Shared/Interfaces'
+import {I18n, Logger} from "@aws-amplify/core";
+import {useState, useEffect} from 'react';
+import {useHistory} from 'react-router';
+import {API} from '@aws-amplify/api';
+import {API_NAME, validateField} from '../util/Utils';
+import {IErrors, IPageProps, ISimulation, IDevice, simTypes} from '../components/Shared/Interfaces'
 import PageTitleBar from '../components/Shared/PageTitleBar';
 import Footer from '../components/Shared/Footer';
 import Form from 'react-bootstrap/Form';
@@ -15,7 +15,8 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import DeviceFields from '../components/SimulationCreate/DeviceFields';
 
-/** 
+const {S3Client, ListObjectsV2Command} = require("@aws-sdk/client-s3");
+/**
  * Renders The simulation Creation Form
  * @returns The simulation creation form
  */
@@ -32,10 +33,11 @@ export default function SimulationCreate(props: IPageProps): JSX.Element {
         stage: "",
         duration: 1,
         interval: 1,
-        devices: [{ typeId: "", name: "", amount: 1 }]
+        devices: [{typeId: "", name: "", amount: 1}]
     });
     const [showValidation, setShowValidation] = useState<string[]>([]);
     const [showDeviceValidation, setShowDeviceValidation] = useState<number[]>([]);
+    const s3 = new S3Client({region: process.env.REGION});
 
     /**
      * React useEffect hook
@@ -50,21 +52,21 @@ export default function SimulationCreate(props: IPageProps): JSX.Element {
 
             if (key === "name" || key === "interval" || key === "duration") {
                 let error: IErrors<ISimulation> = validateField(key, value);
-                newErrs = { ...newErrs, ...error }
+                newErrs = {...newErrs, ...error}
             } else if (key === "devices") {
                 deviceErrs.forEach((device) => {
                     if (Object.keys(device).length > 0) {
-                        let error = { devices: "error" }
-                        newErrs = { ...newErrs, ...error }
+                        let error = {devices: "error"}
+                        newErrs = {...newErrs, ...error}
                     }
                 })
             }
         })
         if (!newErrs.interval && !newErrs.duration) {
             if (simulation.interval >= simulation.duration)
-                newErrs = { ...newErrs, interval: `${I18n.get("interval.error")}` };
+                newErrs = {...newErrs, interval: `${I18n.get("interval.error")}`};
         }
-        setErrs({ ...newErrs });
+        setErrs({...newErrs});
     }, [simulation, deviceErrs])
 
     /**
@@ -79,7 +81,7 @@ export default function SimulationCreate(props: IPageProps): JSX.Element {
         }
 
         try {
-            await API.post(API_NAME, '/simulation', { body: simulation });
+            await API.post(API_NAME, '/simulation', {body: simulation});
             history.push('../');
         } catch (err) {
             logger.error(I18n.get("simulation.create.error"), err);
@@ -89,7 +91,7 @@ export default function SimulationCreate(props: IPageProps): JSX.Element {
 
     /**
      * Updates simulation parameters on form changes
-     * @param event 
+     * @param event
      */
     const handleFormChange = (event: any) => {
         let value = event.target.valueAsNumber || event.target.value;
@@ -110,30 +112,51 @@ export default function SimulationCreate(props: IPageProps): JSX.Element {
                 } else {
                     simulation.simId = "";
                 }
-                let devices = [{ typeId: "", name: "", amount: 1 }];
+                let devices = [{typeId: "", name: "", amount: 1}];
                 simulation.devices = devices;
                 setSimType(type);
                 setShowDeviceValidation([]);
                 break;
-            default: return;
+            default:
+                return;
         }
-        setSimulation({ ...simulation });
+        setSimulation({...simulation});
     }
 
     /**
      * Shows form validation when a field is focused
-     * @param event 
+     * @param event
      */
-    const handleFieldFocus = (event: any) =>  {
-        if(!showValidation.includes(event.target.id)) {
+    const handleFieldFocus = (event: any) => {
+        if (!showValidation.includes(event.target.id)) {
             showValidation.push(event.target.id);
             setShowValidation([...showValidation]);
         }
     }
+    let files_list: string[] = [];
+    const getListOfPlaybacks = async () => {
+
+        let params = {
+            Bucket: process.env.PLAYBACK_BUCKET,
+        };
+
+        try {
+
+            const {Contents, IsTruncated, NextContinuationToken} = await s3.send(new ListObjectsV2Command(params));
+            files_list = Contents.map((c) => ` • ${c.Key}`);
+            console.log(files_list);
+            return files_list;
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    await getListOfPlaybacks();
+
 
     return (
         <div className="page-content">
-            <PageTitleBar title={props.title} />
+            <PageTitleBar title={props.title}/>
             <Card className="content-card">
                 <Card.Title className="content-card-title">
                     {I18n.get("create.simulation")}
@@ -154,7 +177,9 @@ export default function SimulationCreate(props: IPageProps): JSX.Element {
                             <Form.Control
                                 type="text"
                                 id="name"
-                                onChange={(event) => { handleFormChange(event) }}
+                                onChange={(event) => {
+                                    handleFormChange(event)
+                                }}
                                 onFocus={(event: any) => handleFieldFocus(event)}
                                 isInvalid={!!errs.name && showValidation.includes('name')}
                                 isValid={!errs.name}
@@ -171,7 +196,9 @@ export default function SimulationCreate(props: IPageProps): JSX.Element {
                             <Form.Control
                                 as="select"
                                 id="type"
-                                onChange={(event) => {handleFormChange(event)}}
+                                onChange={(event) => {
+                                    handleFormChange(event)
+                                }}
                                 onFocus={(event: any) => handleFieldFocus(event)}
                                 isInvalid={!simType && showValidation.includes('type')}
                                 isValid={!!simType && showValidation.includes('type')}
@@ -179,6 +206,27 @@ export default function SimulationCreate(props: IPageProps): JSX.Element {
                                 <option value={simTypes.custom}>{I18n.get("user.created")}</option>
                                 <option value={simTypes.autoDemo}>{I18n.get("vehicle.demo")}</option>
                                 <option value={simTypes.flespiTest}>{I18n.get("flespi.test")}</option>
+                            </Form.Control>
+                            <Form.Text>
+                                {I18n.get("simulation.type.description")}
+                            </Form.Text>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>
+                                {I18n.get("playback.file")}
+                            </Form.Label>
+                            <Form.Control
+                                as="select"
+                                id="playback_name"
+                                onChange={(event) => {
+                                    handleFormChange(event)
+                                }}
+                                onFocus={(event: any) => handleFieldFocus(event)}
+                            >
+                                {files_list.map(opt => (
+                                    <option value={opt}>{opt}</option>
+                                ))}
+
                             </Form.Control>
                             <Form.Text>
                                 {I18n.get("simulation.type.description")}
@@ -242,7 +290,9 @@ export default function SimulationCreate(props: IPageProps): JSX.Element {
                             </Button>
                             <Button
                                 className="button-theme-alt"
-                                onClick={() => { history.goBack() }}
+                                onClick={() => {
+                                    history.goBack()
+                                }}
                             >
                                 {I18n.get("cancel")}
                             </Button>
