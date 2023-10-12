@@ -8,6 +8,7 @@ const iotMock = AWSMock.mockClient(IoTDataPlaneClient);
 require("aws-sdk-client-mock-jest");
 const Generator = require("./generators/random/generator");
 const Vehicle = require("./generators/vehicle/generator");
+const Flespi = require("./generators/flespi/generator");
 let Device = require("./index.js");
 
 jest.mock("./generators/random/generator");
@@ -81,6 +82,12 @@ describe("Device", function () {
 			simulation.simId = "123idsAutoDemo";
 			const device = new Device(options, simulation, deviceInfo);
 			expect(device.generator).toBeInstanceOf(Vehicle);
+			simulation.simId = "123";
+		});
+		it("should use Flespi as generator when simId contains idsFlespiTest", async () => {
+			simulation.simId = "123idsFlespiTest";
+			const device = new Device(options, simulation, deviceInfo);
+			expect(device.generator).toBeInstanceOf(Flespi);
 			simulation.simId = "123";
 		});
 	});

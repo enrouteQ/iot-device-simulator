@@ -98,7 +98,7 @@ class SimulationManager {
 				throw error;
 			}
 			let _id;
-			if (sim.simId && sim.simId !== "idsAutoDemo") {
+			if (sim.simId && sim.simId !== "idsAutoDemo" && sim.simId !== "idsFlespiTest") {
 				_id = sim.simId;
 			} else {
 				const suffix = sim.simId || "";
@@ -202,7 +202,7 @@ class SimulationManager {
 					eventType: "start simulation",
 					numSimulations: simulations.length,
 				};
-				metricData.simType = simulations[0].simId.includes("idsAutoDemo") ? "autoDemo" : "custom";
+				metricData.simType = simulations[0].simId.includes("idsAutoDemo") ? "autoDemo" : simulations[0].simId.includes("idsFlespiTest") ? "flespiTest" :"custom";
 				await sendAnonymousMetric(metricData);
 			}
 			return responses;

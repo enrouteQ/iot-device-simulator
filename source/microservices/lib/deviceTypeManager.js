@@ -57,7 +57,7 @@ class DeviceTypeManager {
 	async createDeviceType(deviceType) {
 		try {
 			let _id;
-			if (deviceType.typeId && deviceType.typeId !== "idsAutoDemo") {
+			if (deviceType.typeId && deviceType.typeId !== "idsAutoDemo" && deviceType.typeId !== "idsFlespiTest") {
 				_id = deviceType.typeId;
 			} else {
 				const suffix = deviceType.typeId || "";

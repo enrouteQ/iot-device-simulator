@@ -79,5 +79,6 @@ export const AttributeTypeMap = {
 
 export enum simTypes{
     autoDemo = "idsAutoDemo",
+    flespiTest = "idsFlespiTest",
     custom = "custom"
 }
