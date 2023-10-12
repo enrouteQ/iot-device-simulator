@@ -5,7 +5,7 @@ import { I18n, Logger } from '@aws-amplify/core';
 import { useHistory, useLocation } from 'react-router';
 import { useEffect, useState, Fragment } from 'react';
 import { API } from '@aws-amplify/api';
-import { API_NAME, validateField, validateFileContents, VehicleDemoPayload } from '../util/Utils';
+import { API_NAME, validateField, validateFileContents, VehicleDemoPayload, FlespiTestPayload } from '../util/Utils';
 import moment from 'moment'
 import ModalForm from '../components/DeviceTypeCreate/ModalForm';
 import PageTitleBar from '../components/Shared/PageTitleBar';
@@ -341,6 +341,13 @@ export default function DeviceTypeCreate(props: IProps): JSX.Element {
                                 onClick={() => setDeviceType({ ...deviceType, ...VehicleDemoPayload })}
                             >
                                 <i className="bi bi-geo" /> {I18n.get('vehicle.demo')}
+                            </Button>
+                                                        <Button
+                                size="sm"
+                                className="button-theme header-button"
+                                onClick={() => setDeviceType({ ...deviceType, ...FlespiTestPayload })}
+                            >
+                                <i className="bi bi-geo" /> {I18n.get('flespi.test')}
                             </Button>
                             <Form.Control
                                 type="file"
