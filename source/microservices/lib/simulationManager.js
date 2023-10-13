@@ -112,6 +112,7 @@ class SimulationManager {
 				devices: sim.devices,
 				interval: sim.interval,
 				duration: sim.duration,
+				playbackName: sim.playbackName,
 				runs: 0,
 				lastRun: "",
 				createdAt: date,

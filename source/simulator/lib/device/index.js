@@ -9,7 +9,7 @@ const { IoTDataPlaneClient: IotData, PublishCommand } = require("@aws-sdk/client
 const moment = require("moment");
 const Random = require("./generators/random/generator");
 const Vehicle = require("./generators/vehicle/generator.js");
-const Bus = require("./generators/flespi/generator.js");
+const Flespi = require("./generators/flespi/generator.js");
 let awsOptions = { endpoint: "https://" + process.env.IOT_ENDPOINT };
 const { SOLUTION_ID, VERSION } = process.env;
 if (SOLUTION_ID && VERSION && SOLUTION_ID.trim() && VERSION.trim()) {
@@ -32,8 +32,10 @@ class Device {
 		if (device.generator) {
 			this.options.currentState = device.generator.currentState;
 			this.options.staticValues = device.generator.staticValues;
-			this.options.playbackName = device.generator.playbackName;
 		}
+		console.log("Options: ", this.options);
+		console.log("Sim: ", sim);
+		this.options.playbackName = sim.playbackName;
 		this.generator = this.get_generator();
 		this.payload = device.payload;
 		this.topic = device.topic;
@@ -45,7 +47,7 @@ class Device {
 		if (this.simId.includes("idsAutoDemo")) {
 			return new Vehicle(this.options);
 		} else if (this.simId.includes("idsFlespiTest")) {
-			return new Bus(this.options);
+			return new Flespi(this.options);
 		} else {
 			return new Random(this.options);
 		}

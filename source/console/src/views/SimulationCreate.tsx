@@ -15,7 +15,6 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import DeviceFields from '../components/SimulationCreate/DeviceFields';
 
-import {S3Client, ListObjectsV2Command} from "@aws-sdk/client-s3";
 
 /**
  * Renders The simulation Creation Form
@@ -32,13 +31,13 @@ export default function SimulationCreate(props: IPageProps): JSX.Element {
         simId: "",
         name: "",
         stage: "",
+        playbackName: "",
         duration: 1,
         interval: 1,
         devices: [{typeId: "", name: "", amount: 1}]
     });
     const [showValidation, setShowValidation] = useState<string[]>([]);
     const [showDeviceValidation, setShowDeviceValidation] = useState<number[]>([]);
-    const s3 = new S3Client({region: process.env.REGION});
 
     /**
      * React useEffect hook
@@ -51,7 +50,9 @@ export default function SimulationCreate(props: IPageProps): JSX.Element {
             const key = entry[0];
             const value = entry[1];
 
-            if (key === "name" || key === "interval" || key === "duration") {
+            console.log(entry)
+
+            if (key === "name" || key === "interval" || key === "duration" || key === "playbackName") {
                 let error: IErrors<ISimulation> = validateField(key, value);
                 newErrs = {...newErrs, ...error}
             } else if (key === "devices") {
@@ -67,6 +68,7 @@ export default function SimulationCreate(props: IPageProps): JSX.Element {
             if (simulation.interval >= simulation.duration)
                 newErrs = {...newErrs, interval: `${I18n.get("interval.error")}`};
         }
+        console.log(newErrs);
         setErrs({...newErrs});
     }, [simulation, deviceErrs])
 
@@ -74,12 +76,18 @@ export default function SimulationCreate(props: IPageProps): JSX.Element {
      * updates dynamodb on form submission
      */
     const handleSubmit = async (event: any) => {
+        console.log("submitting");
+        console.log(simulation);
         const form = event.currentTarget;
         event.preventDefault();
         form.checkValidity();
+        console.log(form);
+        console.log(Object.keys(errs));
         if (Object.keys(errs).length > 0) {
             return;
         }
+
+        alert(simulation.playbackName)
 
         try {
             await API.post(API_NAME, '/simulation', {body: simulation});
@@ -106,10 +114,15 @@ export default function SimulationCreate(props: IPageProps): JSX.Element {
             case "duration":
                 simulation.duration = value;
                 break;
+            case "playbackName":
+                simulation.playbackName = value;
+                break;
             case "type":
                 const type = event.target.value;
-                if (type === simTypes.autoDemo || type === simTypes.flespiTest) {
+                if (type === simTypes.autoDemo) {
                     simulation.simId = simTypes.autoDemo;
+                } else if (type === simTypes.flespiTest) {
+                    simulation.simId = simTypes.flespiTest;
                 } else {
                     simulation.simId = "";
                 }
@@ -134,25 +147,6 @@ export default function SimulationCreate(props: IPageProps): JSX.Element {
             setShowValidation([...showValidation]);
         }
     }
-    let files_list: string[] = [];
-    const getListOfPlaybacks = async () => {
-
-        let params = {
-            Bucket: process.env.PLAYBACK_BUCKET,
-        };
-
-        try {
-
-            const {Contents, IsTruncated, NextContinuationToken} = await s3.send(new ListObjectsV2Command(params));
-            files_list = Contents.map((c) => ` • ${c.Key}`);
-            console.log(files_list);
-            return files_list;
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    getListOfPlaybacks();
 
 
     return (
@@ -214,24 +208,20 @@ export default function SimulationCreate(props: IPageProps): JSX.Element {
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>
-                                {I18n.get("playback.file")}
+                                {I18n.get("simulation.playback_file_name")}
                             </Form.Label>
                             <Form.Control
-                                as="select"
-                                id="playback_name"
+                                type="text"
+                                id="playbackName"
                                 onChange={(event) => {
                                     handleFormChange(event)
                                 }}
                                 onFocus={(event: any) => handleFieldFocus(event)}
+                                value={simulation.playbackName}
+                                maxLength={30}
                             >
-                                {files_list.map(opt => (
-                                    <option value={opt}>{opt}</option>
-                                ))}
-
                             </Form.Control>
-                            <Form.Text>
-                                {I18n.get("simulation.type.description")}
-                            </Form.Text>
+                            <Form.Control.Feedback type="invalid">{errs.name}</Form.Control.Feedback>
                         </Form.Group>
                         <DeviceFields
                             simType={simType}

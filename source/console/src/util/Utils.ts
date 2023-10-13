@@ -352,6 +352,12 @@ export function validateTopic(value: string) {
     return error;
 }
 
+export function validatePlayback(value: string) {
+    let error: { [key: string]: string } = {}
+
+    return error;
+}
+
 /**
  * Checks the validity of a form field value
  * @param field
@@ -374,6 +380,9 @@ export function validateField(field: string, value: any): Object {
             return validateName(value);
         case "topic":
             return validateTopic(value);
+
+        case "playbackName":
+            return validatePlayback(value);
         case "amount":
             if (value < amtMin) return {amount: getErrors('amount', 'min')};
             else if (value > amtMax) return {amount: getErrors('amount', 'max')};

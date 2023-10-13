@@ -52,6 +52,7 @@ export interface ISimulation {
     createdAt?: string,
     updatedAt?: string
     checked?: boolean
+    playbackName: string,
 }
 
 export type IErrors<T> = {

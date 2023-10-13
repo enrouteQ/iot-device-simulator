@@ -13,12 +13,15 @@ const { nanoid, customAlphabet } = require('nanoid');
 class Generator {
 
     constructor(options) {
+
+        console.log('Initializing generator');
+        console.log('Options: ', options);
         this.options = options;
         this.VIN = options.staticValues?.VIN || this._createVIN();
         this.tripId = options.staticValues?.tripId || nanoid();
         let dynamicsModelParams = {}
         dynamicsModelParams.snapshot = options.currentState || {};
-        dynamicsModelParams.routeName = options.routeName;
+        dynamicsModelParams.playbackName = options.playbackName;
         this.dynamicsModel = new DynamicsModel(dynamicsModelParams);
         this.isRunning = true;
         this.messages = [];

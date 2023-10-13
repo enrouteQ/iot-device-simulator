@@ -44,10 +44,14 @@ class DynamicsModel {
 	 * @param {object} params
 	 */
 	async _initializeData(params) {
+		console.log("Initializing dynamics model");
+		console.log("Params: ", params);
 		this.pollerDelay = 500;
 		this.snapshot = params.snapshot;
-		this.playback_name = params.playback_name;
-		this.routeParams = await this.getPlayback(this.snapshot);
+		this.playbackName = params.playbackName;
+		console.log("Snapshot: ", this.snapshot);
+		console.log("Playback name: ", this.playbackName);
+		this.routeParams = await this.getPlayback(this.snapshot, this.playbackName);
 		this.calculations = [];
 		this.calculations.push(new SpeedCalc(this.snapshot));
 		this.calculations.push(new AccelerationCalc(this.snapshot));
@@ -99,12 +103,12 @@ class DynamicsModel {
 	 * @param {object} snapshot
 	 * @returns relevant route information
 	 */
-	async getPlayback(snapshot, playback_name) {
+	async getPlayback(snapshot, playbackName) {
 		//Select playback file
-		let playbackName = snapshot.routeInfo?.routeName|| playback_name ;
+		let _playbackName = snapshot.routeInfo?.routeName|| playbackName ;
 		let params = {
 			Bucket: process.env.PLAYBACK_BUCKET,
-			Key: playbackName,
+			Key: _playbackName,
 		};
 
 		try {

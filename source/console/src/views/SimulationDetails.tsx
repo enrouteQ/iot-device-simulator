@@ -289,6 +289,12 @@ export default function SimulationDetails(props: IPageProps): JSX.Element {
 							</Row>
 							<Row className='detail'>
 								<Col sm='3'>
+									<b>{I18n.get("playback_file_name")}:</b>
+								</Col>
+								<Col sm='9'>{sim?.playbackName}</Col>
+							</Row>
+							<Row className='detail'>
+								<Col sm='3'>
 									<b>{I18n.get("stage")}:</b>
 								</Col>
 								<Col sm='9'>{sim?.stage}</Col>

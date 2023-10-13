@@ -6,6 +6,7 @@ const { unmarshall } = require("@aws-sdk/util-dynamodb");
 
 exports.handler = async (event, context) => {
 	"use strict";
+	console.log("Received event:", JSON.stringify(event, null, 2));
 	context.callbackWaitsForEmptyEventLoop = false;
 	let results = [];
 	let options = event.options ? event.options : {};
