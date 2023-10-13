@@ -42,6 +42,7 @@ export default function SimulationDetails(props: IPageProps): JSX.Element {
 		const simId = location.pathname.split("/").pop();
 		try {
 			const results = await API.get(API_NAME, `/simulation/${simId}`, {});
+
 			setSim(results);
 			if (results?.simId.includes(simTypes.autoDemo)) {
 				initializeMap();
@@ -206,6 +207,8 @@ export default function SimulationDetails(props: IPageProps): JSX.Element {
 	 * start simulation
 	 */
 	const startSim = async () => {
+		console.log("startSim");
+		console.log("Sim", sim);
 		if (sim && sim.stage === "sleeping") {
 			const body = {
 				action: "start",

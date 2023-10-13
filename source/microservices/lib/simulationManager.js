@@ -67,6 +67,9 @@ class SimulationManager {
 
 			let data = await docClient.send(new GetCommand(params));
 
+			console.log(`Attempting to get simulation ${simId}`)
+			console.log(data)
+
 			if (data.Item) {
 				return data.Item;
 			} else {
@@ -329,6 +332,7 @@ class SimulationManager {
 					devices: body.devices,
 					simId: body.simId,
 					stage: body.stage,
+					playbackName: body.playbackName
 				},
 			};
 			let params = {
