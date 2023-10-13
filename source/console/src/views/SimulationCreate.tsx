@@ -15,7 +15,8 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import DeviceFields from '../components/SimulationCreate/DeviceFields';
 
-const {S3Client, ListObjectsV2Command} = require("@aws-sdk/client-s3");
+import {S3Client, ListObjectsV2Command} from "@aws-sdk/client-s3";
+
 /**
  * Renders The simulation Creation Form
  * @returns The simulation creation form
