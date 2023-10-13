@@ -183,6 +183,7 @@ class SimulationManager {
 					sim.Item.updatedAt = date;
 					sim.Item.runs += 1;
 					sim.Item.stage = newSim.stage;
+					sim.Item.playbackName = newSim.playbackName;
 
 					if (action === "start") {
 						sim.Item.stage = "running";
