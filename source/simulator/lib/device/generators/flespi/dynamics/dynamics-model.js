@@ -51,7 +51,7 @@ class DynamicsModel {
 		this.playbackName = params.playbackName;
 		console.log("Snapshot: ", this.snapshot);
 		console.log("Playback name: ", this.playbackName);
-		this.routeParams = await this.getPlayback(this.snapshot, this.playbackName);
+		this.playbackParams = await this.getPlayback(this.snapshot, this.playbackName);
 		this.calculations = [];
 		this.calculations.push(new SpeedCalc(this.snapshot));
 		this.calculations.push(new AccelerationCalc(this.snapshot));
@@ -63,7 +63,7 @@ class DynamicsModel {
 		this.calculations.push(new OdometerCalc(this.snapshot));
 		this.calculations.push(new FuelLevelCalc(this.snapshot));
 		this.calculations.push(new OilTempCalc(this.snapshot));
-		this.calculations.push(new RouteCalc(this.routeParams, this.snapshot));
+		this.calculations.push(new RouteCalc(this.playbackParams, this.snapshot));
 		//add initial calulationdata to snapshot
 		for (let calculation of this.calculations) {
 			//Add back data from previous lambda if available

@@ -1,8 +1,8 @@
 {
     "end": ["-74.00001", "40.733004"],
-    "description": "Short aggressive route",
-    "route_id": "route-a",
-    "name": "Route A",
+    "description": "Short aggressive playback",
+    "route_id": "playback-a-route",
+    "name": "Playback A",
     "start": ["-73.9889", "40.733123"],
     "profile": "aggressive",
     "stages": [{

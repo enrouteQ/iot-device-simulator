@@ -101,6 +101,9 @@ cd $source_dir/resources
 mkdir $build_dist_dir/routes
 cp -r routes/* $build_dist_dir/routes/
 
+mkdir $build_dist_dir/playbacks
+cp -r playbacks/* $build_dist_dir/playbacks/
+
 echo "------------------------------------------------------------------------------"
 echo "[Create] UI manifest"
 echo "------------------------------------------------------------------------------"
@@ -116,3 +119,12 @@ cd "$build_dist_dir"
 manifest=(`find routes -type f | sed 's|^./||'`)
 manifest_json=$(IFS=,;printf "%s" "${manifest[*]}")
 echo "[\"$manifest_json\"]" | sed 's/,/","/g' >> $build_dist_dir/routes-manifest.json
+
+
+echo "------------------------------------------------------------------------------"
+echo "[Create] Playbacks manifest"
+echo "------------------------------------------------------------------------------"
+cd "$build_dist_dir"
+manifest=(`find playbacks -type f | sed 's|^./||'`)
+manifest_json=$(IFS=,;printf "%s" "${manifest[*]}")
+echo "[\"$manifest_json\"]" | sed 's/,/","/g' >> $build_dist_dir/playbacks-manifest.json

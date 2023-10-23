@@ -147,6 +147,7 @@ export class CustomResourcesConstruct extends Construct {
         this.sourceCodeBucket.grantRead(this.helperLambda, `${this.sourceCodePrefix}/*`);
         props.consoleBucket.grantPut(this.helperLambda);
         props.routesBucket.grantPut(this.helperLambda);
+        props.playbacksBucket.grantPut(this.helperLambda);
 
 
         new CustomResource(this, 'CopyRouteFiles', {

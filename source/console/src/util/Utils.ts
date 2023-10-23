@@ -432,7 +432,35 @@ export const VehicleDemoPayload = {
 
 export const FlespiTestPayload = {
     typeId: simTypes.flespiTest,
-    payload: VehicleDemoPayload.payload
+    payload: [
+        {"name": "ident", "type": "id", "length": 255},
+        {"name": "position_longitude", "type": "float"},
+        {"name": "position_latitude", "type": "float"},
+        {"name": "position_altitude", "type": "float"},
+        {"name": "position_speed", "type": "float"},
+        {"name": "position_direction", "type": "float"},
+        {"name": "position_satellites", "type": "float"},
+        {"name": "position_hdop", "type": "float"},
+        {"name": "position_pdop", "type": "float"},
+        {"name": "position_valid", "type": "bool"},
+        {"name": "server_timestamp", "type": "float"},
+        {"name": "timestamp", "type": "float"},
+        {"name": "protocol_id", "type": "integer"},
+        {"name": "battery_current", "type": "float"},
+        {"name": "battery_voltage", "type": "float"},
+        {"name": "channel_id", "type": "enrouteq"},
+        {"name": "engine_ignition_status", "type": "bool"},
+        {"name": "event_priority_enum", "type": "integer"},
+        {"name": "external_powersource_voltage", "type": "float"},
+        {"name": "gnss_state_enum", "type": "float"},
+        {"name": "gnss_status", "type": "bool"},
+        {"name": "gsm_mcc", "type": "integer"},
+        {"name": "gsm_mnc", "type": "integer"},
+        {"name": "gsm_operator_code", "type": "string"},
+        {"name": "gsm_signal_level", "type": "float"},
+        {"name": "movement_status", "type": "bool"},
+        {"name": "peer", "type": "string"},
+        {"name": "sleep_mode_enum", "type": "integer"},
+        {"name": "vehicle_mileage", "type": "float"}
+    ]
 }
-
-
