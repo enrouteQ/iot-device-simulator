@@ -168,7 +168,7 @@ describe('When IoT Device Simulator stack is created', () => {
     });
 
     it('it should have s3 buckets', () => {
-        template.resourceCountIs('AWS::S3::Bucket', 3);
+        template.resourceCountIs('AWS::S3::Bucket', 4);
     });
 
     it('it should have IAM policy', () => {

@@ -219,6 +219,7 @@ describe('When IoT Device Simulator customResourcesConstruct is created', () => 
 function buildStack() {
     const stack = new Stack();
     const testRouteBucket = new Bucket(stack, 'testRouteBucket');
+    const testPlaybackBucket = new Bucket(stack, 'testPlaybackBucket');
     const testConsoleBucket = new Bucket(stack, 'testConsoleBucket')
     const testPolicy = new Policy(stack, 'TestPolicy', {
         statements: [
@@ -249,6 +250,7 @@ function buildStack() {
         mapName: 'testMap',
         placeIndexName: 'testPlaceIndex',
         routesBucket: testRouteBucket,
+        playbacksBucket: testPlaybackBucket,
         iotPolicyName: 'testIoTPolicy'
     });
 

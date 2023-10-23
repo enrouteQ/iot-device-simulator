@@ -1,0 +1,8 @@
+{
+  "playbacks": [
+    {
+      "id": "playback-a",
+      "s3path": "playbacks/playback-a.json"
+    }
+  ]
+}

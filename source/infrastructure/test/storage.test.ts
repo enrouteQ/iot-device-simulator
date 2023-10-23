@@ -71,7 +71,7 @@ test('IoT Device Simulator storageConstruct Test', () => {
           },
         "UpdateReplacePolicy": "Retain"
     });
-    template.resourceCountIs('AWS::S3::Bucket', 2);
+    template.resourceCountIs('AWS::S3::Bucket', 3);
 
     template.hasResource('AWS::S3::Bucket', {
         Type:'AWS::S3::Bucket',
@@ -101,5 +101,5 @@ test('IoT Device Simulator storageConstruct Test', () => {
         UpdateReplacePolicy: 'Retain'
     });
     expect(template.toJSON()['Resources'][loggingBucketCapture.asString()]['Type']).toStrictEqual('AWS::S3::Bucket');
-    template.resourceCountIs('AWS::S3::BucketPolicy', 1);
+    template.resourceCountIs('AWS::S3::BucketPolicy', 2);
 });

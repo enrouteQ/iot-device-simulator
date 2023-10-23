@@ -137,6 +137,7 @@ describe('When IoT Device Simulator SimulatorConstruct is created', () => {
 function buildStack() {
     const stack = new Stack();
     const testRouteBucket = new Bucket(stack, 'testRouteBucket');
+    const testPlaybackBucket = new Bucket(stack, 'testPlaybackBucket');
     const testPolicy = new Policy(stack, 'TestPolicy', {
         statements: [
             new PolicyStatement({
@@ -163,6 +164,7 @@ function buildStack() {
         simulationTable: testSimTable,
         deviceTypeTable: testDTypeTable,
         routesBucket: testRouteBucket,
+        playbacksBucket: testPlaybackBucket,
         uniqueSuffix: "testSuffix",
         solutionConfig: {
             sendAnonymousUsage: 'Yes',
